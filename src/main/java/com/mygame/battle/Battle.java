@@ -1,8 +1,11 @@
 package com.mygame.battle;
 
 import com.mygame.player.Player;
+import org.fusesource.jansi.Ansi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class Battle {
     private static final Logger logger = LoggerFactory.getLogger(Battle.class);
@@ -17,7 +20,8 @@ public class Battle {
     }
 
     public void start() {
-        logger.info("Battle started between {} and {}", player1.getName(), player2.getName());
+        logger.info(ansi().fg(Ansi.Color.CYAN).a("Battle started between {} and {}").reset().toString(),
+                player1.getName(), player2.getName());
         while (player1.isAlive() && player2.isAlive()) {
             player1.attack(player2);
             rounds++;
@@ -28,9 +32,11 @@ public class Battle {
         }
 
         if (player1.isAlive()) {
-            logger.info("{} wins after {} rounds!", player1.getName(), rounds);
+            logger.info(ansi().fg(Ansi.Color.GREEN).a("{} wins after {} rounds!").reset().toString(),
+                    player1.getName(), rounds);
         } else {
-            logger.info("{} wins after {} rounds!", player2.getName(), rounds);
+            logger.info(ansi().fg(Ansi.Color.GREEN).a("{} wins after {} rounds!").reset().toString(),
+                    player2.getName(), rounds);
         }
     }
 }
