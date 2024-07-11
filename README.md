@@ -4,7 +4,7 @@
 
 ```
 Arborescence du Projet :
-combat-game/
+fight_game/
 ├── src/
 │   ├── main/
 │   │   ├── java/
