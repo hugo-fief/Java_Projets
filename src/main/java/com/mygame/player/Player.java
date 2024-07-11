@@ -1,8 +1,11 @@
 package com.mygame.player;
 
 import com.mygame.strategy.AttackStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Player {
+    private static final Logger logger = LoggerFactory.getLogger(Player.class);
     private String name;
     private int health;
     private int attackPoints;
@@ -30,7 +33,7 @@ public class Player {
     public void attack(Player opponent) {
         int damage = attackStrategy.execute(attackPoints);
         opponent.takeDamage(damage);
-        System.out.println(name + " attacks " + opponent.getName() + " for " + damage + " damage.");
+        logger.info("{} attacks {} for {} damage. {}'s health is now {}.", name, opponent.getName(), damage, opponent.getName(), opponent.getHealth());
     }
 
     public boolean isAlive() {

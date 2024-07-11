@@ -37,6 +37,6 @@ combat-game/
 ```
 
 Bonnes pratiques de Développement :
-- Utiliser le pattern "Strategy" pour les différentes attaques
-- Utiliser le pattern "Factory" pour la création des joueurs
-- Respecter les principes SOLID pour un code maintenable et extensible
+- Utilisation du pattern "Strategy" pour les différentes attaques
+- Utilisation du pattern "Factory" pour la création des joueurs
+- Respect des principes SOLID pour un code maintenable et extensible
