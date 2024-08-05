@@ -1,0 +1,6 @@
+Maven commandes :
+
+mvn clean install => supprime tous les fichiers générés par le build précédent + compile le projet, exécute les tests et installe le fichier JAR du projet
+mvn compile => compile le code source du projet & génère les fichiers du build en cours
+mvn test => compile le code source & exécute les tests unitaires
+mvn exec:java -Dexec.mainClass="com.taskmanager.Main" => exécute une classe java spécifique
