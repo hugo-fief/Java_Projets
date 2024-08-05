@@ -1,6 +1,6 @@
 # PROJETS RÉALISÉS EN JAVA
 
-## ***Développé par Hugo Fief***
+## ***Développés par Hugo Fief***
 
 ### Projet Fight Game
 
@@ -44,10 +44,10 @@ Bonnes pratiques de Développement :
 - Respect des principes SOLID pour un code maintenable et extensible
 
 Force du projet :
-Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
-Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
-Ajout de probabilités d'attaque : Introduction de la logique de succès/échec des attaques pour rendre le jeu plus intéressant.
-Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
+- Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
+- Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
+- Ajout de probabilités d'attaque : Introduction de la logique de succès/échec des attaques pour rendre le jeu plus intéressant.
+- Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
 
 ---
 
@@ -83,6 +83,6 @@ Bonnes pratiques de Développement :
 - Respect des principes SOLID pour un code maintenable et extensible
 
 Force du projet :
-Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
-Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
-Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
+- Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
+- Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
+- Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
