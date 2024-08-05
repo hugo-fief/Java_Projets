@@ -49,15 +49,15 @@ fight_game/
 ```
 
 ### Bonnes pratiques de Developpement pour le projet Fight Game
-- Utilisation du pattern "Strategy" pour les différentes attaques
-- Utilisation du pattern "Factory" pour la création des joueurs
-- Respect des principes SOLID pour un code maintenable et extensible
+- Utilisation du `pattern Strategy` pour les différentes attaques
+- Utilisation du `pattern Factory` pour la création des joueurs
+- Respect des `principes SOLID` pour un code maintenable et extensible
 
 ### Forces du projet Fight Game
-- Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
-- Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
-- Ajout de probabilités d'attaque : Introduction de la logique de succès/échec des attaques pour rendre le jeu plus intéressant.
-- Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
+- `Configuration Maven` : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
+- `Logging avec SLF4J et Logback` : Utilisation de SLF4J pour des logs propres et professionnels.
+- `Ajout de probabilités d'attaque` : Introduction de la logique de succès/échec des attaques pour rendre le jeu plus intéressant.
+- `Coloration des logs` : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
 
 ---
 
@@ -87,20 +87,20 @@ task-manager/
 ```
 
 ### Bonnes pratiques de Developpement pour le projet Todo List
-- Utilisation du pattern "Strategy" pour les différentes priorités et statuts
-- Utilisation du pattern "Factory" pour la création des tâches
-- Respect des principes SOLID pour un code maintenable et extensible
+- Utilisation du `pattern Strategy` pour les différentes priorités et statuts
+- Utilisation du `pattern Factory` pour la création des tâches
+- Respect des `principes SOLID` pour un code maintenable et extensible
 
 ### Forces du projet Todo List
-- Configuration Maven : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
-- Logging avec SLF4J et Logback : Utilisation de SLF4J pour des logs propres et professionnels.
-- Coloration des logs : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
+- `Configuration Maven` : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
+- `Logging avec SLF4J et Logback` : Utilisation de SLF4J pour des logs propres et professionnels.
+- `Coloration des logs` : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
 
 ---
 
 ## Commandes Maven a connaitre
 
-- `mvn clean install` => supprime tous les fichiers générés par le build précédent + compile le projet, exécute les tests et installe le fichier JAR du projet
-- `mvn compile` => compile le code source du projet & génère les fichiers du build en cours
-- `mvn test` => compile le code source & exécute les tests unitaires
-- `mvn exec:java -Dexec.mainClass="com.taskmanager.Main"` => exécute une classe java spécifique
+- `mvn clean install` : Supprime tous les fichiers générés par le build précédent + Compile le projet, exécute les tests et installe le fichier JAR du projet
+- `mvn compile` : Compile le code source du projet & génère les fichiers du build en cours
+- `mvn test` : Compile le code source & exécute les tests unitaires
+- `mvn exec:java -Dexec.mainClass="com.taskmanager.Main"` : Exécute une classe java spécifique
