@@ -4,8 +4,8 @@
 
 ### Projet Fight Game
 
-```
 Arborescence du Projet :
+```
 fight_game/
 ├── src/
 │   ├── main/
