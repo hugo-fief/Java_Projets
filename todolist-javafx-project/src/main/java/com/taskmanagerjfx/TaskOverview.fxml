@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taskmanagerjfx.TaskOverviewController">
+    <children>
+        <TableView fx:id="taskTable" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="400.0">
+            <columns>
+                <TableColumn fx:id="titleColumn" prefWidth="200.0" text="Title" />
+                <TableColumn fx:id="descriptionColumn" prefWidth="200.0" text="Description" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
