@@ -9,20 +9,20 @@ import todo_list.datamodel.TodoItem;
 
 public class DialogController {
 
-    @FXML
-    private TextField shortDescriptionField;
-    @FXML
-    private TextArea detailsArea;
-    @FXML
-    private DatePicker deadlinePicker;
+	@FXML
+	private TextField shortDescriptionField;
+	@FXML
+	private TextArea detailsArea;
+	@FXML
+	private DatePicker deadlinePicker;
 
-    public TodoItem processResults() {
-        var shortDescription = shortDescriptionField.getText().trim();
-        var details = detailsArea.getText().trim();
-        var deadlineValue = deadlinePicker.getValue();
-        var newItem = new TodoItem(shortDescription, details, deadlineValue);
+	public TodoItem processResults() {
+		var shortDescription = shortDescriptionField.getText().trim();
+		var details = detailsArea.getText().trim();
+		var deadlineValue = deadlinePicker.getValue();
+		var newItem = new TodoItem(shortDescription, details, deadlineValue);
 
-        TodoData.getInstance().addTodoItem(newItem);
-        return newItem;
-    }
+		TodoData.getInstance().addTodoItem(newItem);
+		return newItem;
+	}
 }
