@@ -10,6 +10,8 @@
   * [Arborescence du projet Todo List](#arborescence-du-projet-todo-list)
   * [Bonnes pratiques de Développement pour le projet Todo List](#bonnes-pratiques-de-developpement-pour-le-projet-todo-list)
   * [Forces du projet Todo List](#forces-du-projet-todo-list)
+* [Projet Todo List JavaFX](#projet-todo-list-javafx)
+  * [Arborescence du projet Todo List JavaFX](#arborescence-du-projet-todo-list-javafx)
 * [Commandes Maven a connaitre](#commandes-maven-a-connaitre)
 
 ## Projet Fight Game
@@ -65,7 +67,7 @@ fight_game/
 
 ### Arborescence du projet Todo List
 ```
-task-manager/
+todolist-project/
 ├── pom.xml
 ├── src/
 │   ├── main/
@@ -95,6 +97,32 @@ task-manager/
 - `Configuration Maven` : Utilisation de Maven pour la gestion des dépendances et l'organisation du projet.
 - `Logging avec SLF4J et Logback` : Utilisation de SLF4J pour des logs propres et professionnels.
 - `Coloration des logs` : Utilisation de la bibliothèque Jansi pour ajouter des couleurs aux messages de log, améliorant ainsi la lisibilité.
+
+---
+
+## Projet Todo List JavaFX
+
+### Arborescence du projet Todo List JavaFX
+```
+todolist-javafx-project/
+├── pom.xml
+├── TodoListItems.txt
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── module-info.java
+│   │   │   └── todo_list/
+│   │   │       ├── Main.java
+│   │   │       ├── Controller.java
+│   │   │       ├── DialogController.java
+│   │   │       └── datamodel/
+│   │   │           ├── TodoData.java
+│   │   │           └── TodoItem.java
+│   │   └── resources/
+│   │       └── view/
+│   │           ├── main-window.fxml
+│   │           └── todoItem-dialog.fxml
+```
 
 ---
 
