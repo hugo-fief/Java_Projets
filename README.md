@@ -138,3 +138,4 @@ todolist-javafx-project/
 - `mvn compile` : Compile le code source du projet & génère les fichiers du build en cours
 - `mvn test` : Compile le code source & exécute les tests unitaires
 - `mvn exec:java -Dexec.mainClass="com.taskmanager.Main"` : Exécute une classe java spécifique
+- `mvn exec:java -Dexec.mainClass="com.taskmanager.Main" -X` : Exécute une classe java spécifique en utilisant le débogage
