@@ -11,37 +11,37 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-    private static Scene scene;
+	private static Scene scene;
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+	static void setRoot(String fxml) throws IOException {
+		scene.setRoot(loadFXML(fxml));
+	}
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
+	private static Parent loadFXML(String fxml) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml + ".fxml"));
+		return fxmlLoader.load();
+	}
 
-    public static void main(String... args) {
-        launch();
-    }
+	public static void main(String... args) {
+		launch();
+	}
 
-    @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("main-window"), 900, 500);
-        stage.setResizable(false);
-        stage.setTitle("TODO List");
-        stage.setScene(scene);
-        stage.show();
-    }
+	@Override
+	public void start(Stage stage) throws IOException {
+		scene = new Scene(loadFXML("main-window"), 900, 500);
+		stage.setResizable(false);
+		stage.setTitle("TODO List");
+		stage.setScene(scene);
+		stage.show();
+	}
 
-    @Override
-    public void stop() throws IOException {
-        TodoData.getInstance().storeTodoItems();
-    }
+	@Override
+	public void stop() throws IOException {
+		TodoData.getInstance().storeTodoItems();
+	}
 
-    @Override
-    public void init() throws Exception {
-        TodoData.getInstance().loadTodoItems();
-    }
+	@Override
+	public void init() throws Exception {
+		TodoData.getInstance().loadTodoItems();
+	}
 }
