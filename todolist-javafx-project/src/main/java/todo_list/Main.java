@@ -9,7 +9,6 @@ import todo_list.datamodel.TodoData;
 
 import java.io.IOException;
 
-@SuppressWarnings("unused")
 public class Main extends Application {
 
     private static Scene scene;

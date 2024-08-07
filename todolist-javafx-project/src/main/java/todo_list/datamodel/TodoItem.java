@@ -2,7 +2,6 @@ package todo_list.datamodel;
 
 import java.time.LocalDate;
 
-@SuppressWarnings("unused")
 public class TodoItem {
 
     private String shortDescription;
