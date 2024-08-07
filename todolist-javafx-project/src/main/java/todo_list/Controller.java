@@ -13,13 +13,15 @@ import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import todo_list.datamodel.TodoData;
 import todo_list.datamodel.TodoItem;
+import todo_list.filter.AllItemsFilter;
+import todo_list.filter.TodayItemsFilter;
+import todo_list.filter.TodoItemFilter;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public class Controller {
 
@@ -37,8 +39,8 @@ public class Controller {
 	private ToggleButton filterToggleButton;
 
 	private FilteredList<TodoItem> filteredList;
-	private Predicate<TodoItem> wantAllItems;
-	private Predicate<TodoItem> wantTodayItems;
+	private TodoItemFilter allItemsFilter;
+	private TodoItemFilter todayItemsFilter;
 
 	public void initialize() {
 		listContextMenu = new ContextMenu();
@@ -58,7 +60,7 @@ public class Controller {
 			}
 		});
 
-		listContextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
+		listContextMenu.getItems().addAll(deleteMenuItem, editMenuItem);
 		todoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				var item = todoListView.getSelectionModel().getSelectedItem();
@@ -69,10 +71,10 @@ public class Controller {
 			}
 		});
 
-		wantAllItems = item -> true;
-		wantTodayItems = todoItem -> todoItem.getDeadline().equals(LocalDate.now());
+		allItemsFilter = new AllItemsFilter();
+		todayItemsFilter = new TodayItemsFilter();
 
-		filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(), wantAllItems);
+		filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(), allItemsFilter::test);
 		SortedList<TodoItem> sortedList = new SortedList<>(filteredList, Comparator.comparing(TodoItem::getDeadline));
 
 		todoListView.setItems(sortedList);
@@ -187,7 +189,7 @@ public class Controller {
 	public void handleFilterButton() {
 		var selectedItem = todoListView.getSelectionModel().getSelectedItem();
 		if (filterToggleButton.isSelected()) {
-			filteredList.setPredicate(wantTodayItems);
+			filteredList.setPredicate(todayItemsFilter::test);
 			if (filteredList.isEmpty()) {
 				itemDetailsTextArea.clear();
 				itemDetailsTextArea.setText("");
@@ -199,7 +201,7 @@ public class Controller {
 				}
 			}
 		} else {
-			filteredList.setPredicate(wantAllItems);
+			filteredList.setPredicate(allItemsFilter::test);
 			todoListView.getSelectionModel().select(selectedItem);
 		}
 	}

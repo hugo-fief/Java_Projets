@@ -14,10 +14,11 @@ public class TodoData {
 	private static final TodoData instance = new TodoData();
 	private static final String filename = "TodoListItems.txt";
 	private final DateTimeFormatter formatter;
-	private ObservableList<TodoItem> todoItems;
+	private final ObservableList<TodoItem> todoItems;
 
 	private TodoData() {
 		formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		todoItems = FXCollections.observableArrayList();
 	}
 
 	public static TodoData getInstance() {
@@ -37,7 +38,6 @@ public class TodoData {
 	}
 
 	public void loadTodoItems() throws IOException {
-		todoItems = FXCollections.observableArrayList();
 		var path = Paths.get(filename);
 
 		try (var buffReader = Files.newBufferedReader(path)) {

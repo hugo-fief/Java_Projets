@@ -5,6 +5,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import todo_list.datamodel.TodoItem;
+import todo_list.datamodel.TodoItemFactory;
 
 public class DialogController {
 
@@ -16,10 +17,8 @@ public class DialogController {
 	private DatePicker deadlinePicker;
 
 	public TodoItem processResults() {
-		var shortDescription = shortDescriptionField.getText().trim();
-		var details = detailsArea.getText().trim();
-		var deadlineValue = deadlinePicker.getValue();
-		return new TodoItem(shortDescription, details, deadlineValue);
+		return TodoItemFactory.createTodoItem(shortDescriptionField.getText().trim(), detailsArea.getText().trim(),
+				deadlinePicker.getValue());
 	}
 
 	public void updateItem(TodoItem item) {

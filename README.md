@@ -12,6 +12,7 @@
   * [Forces du projet Todo List](#forces-du-projet-todo-list)
 * [Projet Todo List JavaFX](#projet-todo-list-javafx)
   * [Arborescence du projet Todo List JavaFX](#arborescence-du-projet-todo-list-javafx)
+  * [Bonnes pratiques de Développement pour le projet Todo List JavaFX](#bonnes-pratiques-de-developpement-pour-le-projet-todo-list-javafx)
 * [Commandes Maven a connaitre](#commandes-maven-a-connaitre)
 
 ## Projet Fight Game
@@ -123,6 +124,11 @@ todolist-javafx-project/
 │   │           ├── main-window.fxml
 │   │           └── todoItem-dialog.fxml
 ```
+
+### Bonnes pratiques de Developpement pour le projet Todo List JavaFX
+- Utilisation du `pattern Strategy` pour les filtres et la gestion des données
+- Utilisation du `pattern Factory` pour la création des tâches
+- Respect des `principes SOLID` pour un code maintenable et extensible
 
 ---
 
