@@ -16,15 +16,25 @@ public class TodoData {
     private final DateTimeFormatter formatter;
     private ObservableList<TodoItem> todoItems;
 
-    private TodoData() { formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); }
+    private TodoData() {
+        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    }
 
-    public static TodoData getInstance() { return instance; }
+    public static TodoData getInstance() {
+        return instance;
+    }
 
-    public ObservableList<TodoItem> getTodoItems() { return todoItems; }
+    public ObservableList<TodoItem> getTodoItems() {
+        return todoItems;
+    }
 
-    public void addTodoItem(TodoItem item) { todoItems.add(item); }
+    public void addTodoItem(TodoItem item) {
+        todoItems.add(item);
+    }
 
-    public void deleteTodoItem(TodoItem item) { todoItems.remove(item); }
+    public void deleteTodoItem(TodoItem item) {
+        todoItems.remove(item);
+    }
 
     public void loadTodoItems() throws IOException {
         todoItems = FXCollections.observableArrayList();

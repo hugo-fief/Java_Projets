@@ -31,7 +31,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("main-window"), 900, 500);
         stage.setResizable(false);
-        stage.setTitle("TODO List v1");
+        stage.setTitle("TODO List");
         stage.setScene(scene);
         stage.show();
     }

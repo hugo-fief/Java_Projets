@@ -1,6 +1,7 @@
 package todo_list;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -48,7 +49,17 @@ public class Controller {
             deleteItem(item);
         });
 
-        listContextMenu.getItems().addAll(deleteMenuItem);
+        var editMenuItem = new MenuItem("Edit");
+        editMenuItem.setOnAction(event -> {
+            var item = todoListView.getSelectionModel().getSelectedItem();
+            try {
+                showEditItemDialog(item);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        listContextMenu.getItems().addAll(deleteMenuItem, editMenuItem);
         todoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 var item = todoListView.getSelectionModel().getSelectedItem();
@@ -69,25 +80,32 @@ public class Controller {
         todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         todoListView.getSelectionModel().selectFirst();
 
-        todoListView.setCellFactory(new Callback<>() {
+        todoListView.setCellFactory(new Callback<ListView<TodoItem>, ListCell<TodoItem>>() {
             @Override
             public ListCell<TodoItem> call(ListView<TodoItem> todoItemListView) {
                 var cell = new ListCell<TodoItem>() {
                     @Override
                     protected void updateItem(TodoItem item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty) setText(null);
-                        else {
+                        if (empty) {
+                            setText(null);
+                        } else {
                             setText(item.getShortDescription());
-                            if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))) setTextFill(Color.RED);
-                            else if (item.getDeadline().equals(LocalDate.now().plusDays(1))) setTextFill(Color.DARKORCHID);
+                            if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))) {
+                                setTextFill(Color.RED);
+                            } else if (item.getDeadline().equals(LocalDate.now().plusDays(1))) {
+                                setTextFill(Color.DARKORCHID);
+                            }
                         }
                     }
                 };
 
                 cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                    if (isNowEmpty) cell.setContextMenu(null);
-                    else cell.setContextMenu(listContextMenu);
+                    if (isNowEmpty) {
+                        cell.setContextMenu(null);
+                    } else {
+                        cell.setContextMenu(listContextMenu);
+                    }
                 });
 
                 return cell;
@@ -110,10 +128,41 @@ public class Controller {
 
         var result = dialog.showAndWait();
         if (result.isPresent() && result.get().equals(ButtonType.OK)) {
-            var controller = (DialogController) fxmlLoader.getController();
-            var newItem = controller.processResults();
+            DialogController controller = fxmlLoader.getController();
+            TodoItem newItem = controller.processResults();
+            TodoData.getInstance().addTodoItem(newItem);
             todoListView.getSelectionModel().select(newItem);
         }
+    }
+
+    public void showEditItemDialog(TodoItem item) throws IOException {
+        var dialog = new Dialog<ButtonType>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        dialog.setTitle("Edit Todo Item");
+        dialog.setHeaderText("Use this dialog to edit the selected todo item");
+
+        var fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("todoItem-dialog.fxml"));
+        dialog.getDialogPane().setContent(fxmlLoader.load());
+
+        DialogController controller = fxmlLoader.getController();
+        controller.setFields(item);
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        var result = dialog.showAndWait();
+        if (result.isPresent() && result.get().equals(ButtonType.OK)) {
+            controller.updateItem(item);
+            refreshTodoList();
+        }
+    }
+
+    private void refreshTodoList() {
+        int selectedIdx = todoListView.getSelectionModel().getSelectedIndex();
+        todoListView.setItems(null);
+        todoListView.setItems(new SortedList<>(filteredList, Comparator.comparing(TodoItem::getDeadline)));
+        todoListView.getSelectionModel().select(selectedIdx);
     }
 
     public void deleteItem(TodoItem item) {
@@ -122,12 +171,18 @@ public class Controller {
         alert.setHeaderText("Delete item: " + item.getShortDescription());
         alert.setContentText("Are you sure? Press OK to confirm, CANCEL otherwise.");
         var result = alert.showAndWait();
-        if (result.isPresent() && result.get().equals(ButtonType.OK)) TodoData.getInstance().deleteTodoItem(item);
+        if (result.isPresent() && result.get().equals(ButtonType.OK)) {
+            TodoData.getInstance().deleteTodoItem(item);
+        }
     }
 
     public void handleKeyPressed(KeyEvent event) {
         var selectedItem = todoListView.getSelectionModel().getSelectedItem();
-        if (Objects.nonNull(selectedItem)) if (event.getCode().equals(KeyCode.DELETE)) deleteItem(selectedItem);
+        if (Objects.nonNull(selectedItem)) {
+            if (event.getCode().equals(KeyCode.DELETE)) {
+                deleteItem(selectedItem);
+            }
+        }
     }
 
     public void handleFilterButton() {
@@ -137,15 +192,20 @@ public class Controller {
             if (filteredList.isEmpty()) {
                 itemDetailsTextArea.clear();
                 itemDetailsTextArea.setText("");
+            } else {
+                if (filteredList.contains(selectedItem)) {
+                    todoListView.getSelectionModel().select(selectedItem);
+                } else {
+                    todoListView.getSelectionModel().selectFirst();
+                }
             }
-
-            else if (filteredList.contains(selectedItem)) todoListView.getSelectionModel().select(selectedItem);
-            else todoListView.getSelectionModel().selectFirst();
         } else {
             filteredList.setPredicate(wantAllItems);
             todoListView.getSelectionModel().select(selectedItem);
         }
     }
 
-    public void handleExit() { Platform.exit(); }
+    public void handleExit() {
+        Platform.exit();
+    }
 }
