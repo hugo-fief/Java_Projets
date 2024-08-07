@@ -1,53 +1,81 @@
 package todo_list;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import todo_list.datamodel.TodoData;
 import todo_list.datamodel.TodoItem;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
+@ExtendWith(ApplicationExtension.class)
 public class DialogControllerTest {
 
-	private DialogController controller;
+	private DialogController dialogController;
+	@SuppressWarnings("unused")
+	private TodoData mockTodoData;
+	@SuppressWarnings("unused")
+	private Stage stage;
+
+	@Start
+	public void start(Stage stage) throws Exception {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("todoItem-dialog.fxml"));
+		stage.setScene(new Scene(loader.load()));
+		this.stage = stage;
+		this.dialogController = loader.getController();
+		stage.show();
+	}
 
 	@BeforeEach
 	public void setUp() {
-		controller = new DialogController();
-		controller.shortDescriptionField = new TextField();
-		controller.detailsArea = new TextArea();
-		controller.deadlinePicker = new DatePicker();
+		mockTodoData = mock(TodoData.class);
 	}
 
 	@Test
 	public void testProcessResults() {
-		controller.shortDescriptionField.setText("Test");
-		controller.detailsArea.setText("Test details");
-		controller.deadlinePicker.setValue(LocalDate.now());
+		dialogController.shortDescriptionField = new TextField();
+		dialogController.detailsArea = new TextArea();
+		dialogController.deadlinePicker = new DatePicker();
 
-		TodoItem item = controller.processResults();
+		dialogController.shortDescriptionField.setText("New Task");
+		dialogController.detailsArea.setText("Details of new task");
+		dialogController.deadlinePicker.setValue(LocalDate.now().plusDays(1));
 
-		assertEquals("Test", item.getShortDescription());
-		assertEquals("Test details", item.getDetails());
-		assertEquals(LocalDate.now(), item.getDeadline());
+		TodoItem newItem = dialogController.processResults();
+
+		assertEquals("New Task", newItem.getShortDescription());
+		assertEquals("Details of new task", newItem.getDetails());
+		assertEquals(LocalDate.now().plusDays(1), newItem.getDeadline());
 	}
 
+	@SuppressWarnings("exports")
 	@Test
-	public void testUpdateItem() {
-		TodoItem item = new TodoItem("Old Test", "Old details", LocalDate.now().minusDays(1));
+	public void testUpdateItem(FxRobot robot) {
+		TodoItem existingItem = new TodoItem("Existing Task", "Existing details", LocalDate.now());
+		robot.interact(() -> {
+			dialogController.shortDescriptionField.setText(existingItem.getShortDescription());
+			dialogController.detailsArea.setText(existingItem.getDetails());
+			dialogController.deadlinePicker.setValue(existingItem.getDeadline());
+		});
 
-		controller.shortDescriptionField.setText("Updated Test");
-		controller.detailsArea.setText("Updated details");
-		controller.deadlinePicker.setValue(LocalDate.now());
+		robot.clickOn(".button").lookup("OK");
 
-		controller.updateItem(item);
+		TodoItem updatedItem = dialogController.processResults();
 
-		assertEquals("Updated Test", item.getShortDescription());
-		assertEquals("Updated details", item.getDetails());
-		assertEquals(LocalDate.now(), item.getDeadline());
+		assertEquals(existingItem.getShortDescription(), updatedItem.getShortDescription());
+		assertEquals(existingItem.getDetails(), updatedItem.getDetails());
+		assertEquals(existingItem.getDeadline(), updatedItem.getDeadline());
 	}
 }

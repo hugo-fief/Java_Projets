@@ -1,6 +1,7 @@
 package todo_list;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -20,8 +21,8 @@ public class ControllerTest {
 	private TodoData mockTodoData;
 	private ListView<TodoItem> mockListView;
 
-	@BeforeEach
 	@SuppressWarnings("unchecked")
+	@BeforeEach
 	public void setUp() {
 		controller = new Controller();
 		mockTodoData = Mockito.mock(TodoData.class);
@@ -29,13 +30,17 @@ public class ControllerTest {
 
 		controller.todoListView = mockListView;
 
-		when(mockTodoData.getTodoItems()).thenReturn(FXCollections.observableArrayList());
+		ObservableList<TodoItem> mockTodoItems = FXCollections.observableArrayList();
+		when(mockTodoData.getTodoItems()).thenReturn(mockTodoItems);
+		when(mockListView.getItems()).thenReturn(mockTodoItems);
 	}
 
 	@Test
 	public void testHandleKeyPressed() {
 		TodoItem item = new TodoItem("Test", "Test details", LocalDate.now());
+		ObservableList<TodoItem> mockTodoItems = FXCollections.observableArrayList(item);
 		when(mockListView.getSelectionModel().getSelectedItem()).thenReturn(item);
+		when(mockListView.getItems()).thenReturn(mockTodoItems);
 
 		KeyEvent keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.DELETE, false, false, false, false);
 

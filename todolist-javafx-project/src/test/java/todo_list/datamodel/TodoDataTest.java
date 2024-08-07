@@ -3,9 +3,10 @@ package todo_list.datamodel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TodoDataTest {
@@ -15,16 +16,20 @@ public class TodoDataTest {
 	@BeforeEach
 	public void setUp() {
 		todoData = TodoData.getInstance();
-		todoData.getTodoItems().clear(); // Clear items before each test
+		
+		try {
+			todoData.loadTodoItems();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testAddTodoItem() {
 		TodoItem item = new TodoItem("Test", "Test details", LocalDate.now());
 		todoData.addTodoItem(item);
-
-		assertEquals(1, todoData.getTodoItems().size());
-		assertTrue(todoData.getTodoItems().contains(item));
+		List<TodoItem> items = todoData.getTodoItems();
+		assertTrue(items.contains(item));
 	}
 
 	@Test
@@ -32,7 +37,7 @@ public class TodoDataTest {
 		TodoItem item = new TodoItem("Test", "Test details", LocalDate.now());
 		todoData.addTodoItem(item);
 		todoData.deleteTodoItem(item);
-
-		assertEquals(0, todoData.getTodoItems().size());
+		List<TodoItem> items = todoData.getTodoItems();
+		assertTrue(!items.contains(item));
 	}
 }

@@ -1,31 +1,34 @@
 package todo_list.datamodel;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class TodoData {
 
-	private static final TodoData instance = new TodoData();
+	private static TodoData instance = new TodoData();
 	private static final String filename = "TodoListItems.txt";
 	private final DateTimeFormatter formatter;
-	private final ObservableList<TodoItem> todoItems;
+	private List<TodoItem> todoItems;
 
 	private TodoData() {
 		formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		todoItems = FXCollections.observableArrayList();
 	}
 
 	public static TodoData getInstance() {
 		return instance;
 	}
 
-	public ObservableList<TodoItem> getTodoItems() {
+	public static void setInstance(TodoData instance) {
+		TodoData.instance = instance;
+	}
+
+	public List<TodoItem> getTodoItems() {
 		return todoItems;
 	}
 
@@ -38,6 +41,7 @@ public class TodoData {
 	}
 
 	public void loadTodoItems() throws IOException {
+		todoItems = FXCollections.observableArrayList();
 		var path = Paths.get(filename);
 
 		try (var buffReader = Files.newBufferedReader(path)) {

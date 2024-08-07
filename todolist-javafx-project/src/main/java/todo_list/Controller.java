@@ -1,6 +1,7 @@
 package todo_list;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -13,15 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import todo_list.datamodel.TodoData;
 import todo_list.datamodel.TodoItem;
-import todo_list.filter.AllItemsFilter;
-import todo_list.filter.TodayItemsFilter;
-import todo_list.filter.TodoItemFilter;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class Controller {
 
@@ -39,8 +38,8 @@ public class Controller {
 	private ToggleButton filterToggleButton;
 
 	private FilteredList<TodoItem> filteredList;
-	private TodoItemFilter allItemsFilter;
-	private TodoItemFilter todayItemsFilter;
+	private Predicate<TodoItem> allItemsFilter;
+	private Predicate<TodoItem> todayItemsFilter;
 
 	public void initialize() {
 		listContextMenu = new ContextMenu();
@@ -50,17 +49,7 @@ public class Controller {
 			deleteItem(item);
 		});
 
-		var editMenuItem = new MenuItem("Edit");
-		editMenuItem.setOnAction(event -> {
-			var item = todoListView.getSelectionModel().getSelectedItem();
-			try {
-				showEditItemDialog(item);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-
-		listContextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
+		listContextMenu.getItems().addAll(deleteMenuItem);
 		todoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				var item = todoListView.getSelectionModel().getSelectedItem();
@@ -71,42 +60,41 @@ public class Controller {
 			}
 		});
 
-		allItemsFilter = new AllItemsFilter();
-		todayItemsFilter = new TodayItemsFilter();
+		allItemsFilter = item -> true;
+		todayItemsFilter = todoItem -> todoItem.getDeadline().equals(LocalDate.now());
 
-		filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(), allItemsFilter::test);
+		filteredList = new FilteredList<>(FXCollections.observableArrayList(TodoData.getInstance().getTodoItems()),
+				allItemsFilter);
 		SortedList<TodoItem> sortedList = new SortedList<>(filteredList, Comparator.comparing(TodoItem::getDeadline));
 
 		todoListView.setItems(sortedList);
 		todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		todoListView.getSelectionModel().selectFirst();
 
-		todoListView.setCellFactory(new Callback<ListView<TodoItem>, ListCell<TodoItem>>() {
+		todoListView.setCellFactory(new Callback<>() {
 			@Override
 			public ListCell<TodoItem> call(ListView<TodoItem> todoItemListView) {
 				var cell = new ListCell<TodoItem>() {
 					@Override
 					protected void updateItem(TodoItem item, boolean empty) {
 						super.updateItem(item, empty);
-						if (empty) {
+						if (empty)
 							setText(null);
-						} else {
+						else {
 							setText(item.getShortDescription());
-							if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))) {
+							if (item.getDeadline().isBefore(LocalDate.now().plusDays(1)))
 								setTextFill(Color.RED);
-							} else if (item.getDeadline().equals(LocalDate.now().plusDays(1))) {
+							else if (item.getDeadline().equals(LocalDate.now().plusDays(1)))
 								setTextFill(Color.DARKORCHID);
-							}
 						}
 					}
 				};
 
 				cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-					if (isNowEmpty) {
+					if (isNowEmpty)
 						cell.setContextMenu(null);
-					} else {
+					else
 						cell.setContextMenu(listContextMenu);
-					}
 				});
 
 				return cell;
@@ -136,72 +124,36 @@ public class Controller {
 		}
 	}
 
-	public void showEditItemDialog(TodoItem item) throws IOException {
-		var dialog = new Dialog<ButtonType>();
-		dialog.initOwner(mainBorderPane.getScene().getWindow());
-		dialog.setTitle("Edit Todo Item");
-		dialog.setHeaderText("Use this dialog to edit the selected todo item");
-
-		var fxmlLoader = new FXMLLoader();
-		fxmlLoader.setLocation(getClass().getResource("todoItem-dialog.fxml"));
-		dialog.getDialogPane().setContent(fxmlLoader.load());
-
-		DialogController controller = fxmlLoader.getController();
-		controller.setFields(item);
-
-		dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-		dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
-		var result = dialog.showAndWait();
-		if (result.isPresent() && result.get().equals(ButtonType.OK)) {
-			controller.updateItem(item);
-			refreshTodoList();
-		}
-	}
-
-	private void refreshTodoList() {
-		int selectedIdx = todoListView.getSelectionModel().getSelectedIndex();
-		todoListView.setItems(null);
-		todoListView.setItems(new SortedList<>(filteredList, Comparator.comparing(TodoItem::getDeadline)));
-		todoListView.getSelectionModel().select(selectedIdx);
-	}
-
 	public void deleteItem(TodoItem item) {
 		var alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete Todo Item");
 		alert.setHeaderText("Delete item: " + item.getShortDescription());
 		alert.setContentText("Are you sure? Press OK to confirm, CANCEL otherwise.");
 		var result = alert.showAndWait();
-		if (result.isPresent() && result.get().equals(ButtonType.OK)) {
+		if (result.isPresent() && result.get().equals(ButtonType.OK))
 			TodoData.getInstance().deleteTodoItem(item);
-		}
 	}
 
 	public void handleKeyPressed(KeyEvent event) {
 		var selectedItem = todoListView.getSelectionModel().getSelectedItem();
-		if (Objects.nonNull(selectedItem)) {
-			if (event.getCode().equals(KeyCode.DELETE)) {
+		if (Objects.nonNull(selectedItem))
+			if (event.getCode().equals(KeyCode.DELETE))
 				deleteItem(selectedItem);
-			}
-		}
 	}
 
 	public void handleFilterButton() {
 		var selectedItem = todoListView.getSelectionModel().getSelectedItem();
 		if (filterToggleButton.isSelected()) {
-			filteredList.setPredicate(todayItemsFilter::test);
+			filteredList.setPredicate(todayItemsFilter);
 			if (filteredList.isEmpty()) {
 				itemDetailsTextArea.clear();
 				itemDetailsTextArea.setText("");
-			} else {
-				if (filteredList.contains(selectedItem)) {
-					todoListView.getSelectionModel().select(selectedItem);
-				} else {
-					todoListView.getSelectionModel().selectFirst();
-				}
-			}
+			} else if (filteredList.contains(selectedItem))
+				todoListView.getSelectionModel().select(selectedItem);
+			else
+				todoListView.getSelectionModel().selectFirst();
 		} else {
-			filteredList.setPredicate(allItemsFilter::test);
+			filteredList.setPredicate(allItemsFilter);
 			todoListView.getSelectionModel().select(selectedItem);
 		}
 	}
