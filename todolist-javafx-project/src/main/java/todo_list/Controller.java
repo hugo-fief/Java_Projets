@@ -60,7 +60,7 @@ public class Controller {
 			}
 		});
 
-		listContextMenu.getItems().addAll(deleteMenuItem, editMenuItem);
+		listContextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
 		todoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				var item = todoListView.getSelectionModel().getSelectedItem();
