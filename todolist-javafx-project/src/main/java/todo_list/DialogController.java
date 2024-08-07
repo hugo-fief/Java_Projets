@@ -10,11 +10,11 @@ import todo_list.datamodel.TodoItemFactory;
 public class DialogController {
 
 	@FXML
-	protected TextField shortDescriptionField;
+	private TextField shortDescriptionField;
 	@FXML
-	protected TextArea detailsArea;
+	private TextArea detailsArea;
 	@FXML
-	protected DatePicker deadlinePicker;
+	private DatePicker deadlinePicker;
 
 	public TodoItem processResults() {
 		return TodoItemFactory.createTodoItem(shortDescriptionField.getText().trim(), detailsArea.getText().trim(),
