@@ -26,7 +26,7 @@ import java.util.Objects;
 public class Controller {
 
 	@FXML
-	private ListView<TodoItem> todoListView;
+	protected ListView<TodoItem> todoListView;
 	@FXML
 	private TextArea itemDetailsTextArea;
 	@FXML
